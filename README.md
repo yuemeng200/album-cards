@@ -1,8 +1,6 @@
-# React + Vite
+# cards
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 项目介绍
 
-Currently, two official plugins are available:
+制作分享卡片的工具，每个卡片包括卡片视图和编辑器。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh

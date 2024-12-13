@@ -1,0 +1,369 @@
+// 变量定义
+@primary-color: #2563eb;
+@bg-color: #f8fafc;
+@panel-bg: #ffffff;
+@border-color: #e2e8f0;
+@text-primary: #1e293b;
+@text-secondary: #64748b;
+
+// Mixins
+.flex-center() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-column() {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-ellipsis() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transition() {
+  transition: all 0.2s ease;
+}
+* {
+  box-sizing: border-box;
+}
+
+// 字体定义
+@font-face {
+  font-family: 'Redoura';
+  src: url('./assets/fonts/Redoura.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Chiller';
+  src: url('./assets/fonts/CHILLER.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'FZYTK';
+  src: url('./assets/fonts/FZYTK.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Harrington';
+  src: url('./assets/fonts/HARNGTON.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'MTCorsva';
+  src: url('./assets/fonts/MTCORSVA.ttf') format('truetype');
+}
+
+// 字体类
+.font {
+  &-redoura {
+    font-family: 'Redoura', sans-serif;
+  }
+
+  &-chiller {
+    font-family: 'Chiller', sans-serif;
+  }
+
+  &-fzytk {
+    font-family: 'FZYTK', sans-serif;
+  }
+
+  &-harngton {
+    font-family: 'Harrington', sans-serif;
+  }
+
+  &-mtcorsva {
+    font-family: 'MTCorsva', sans-serif;
+  }
+}
+
+// 全局样式
+body {
+  background-color: @bg-color;
+  #root {
+  }
+}
+
+// 容器样式
+.container {
+  display: flex;
+  max-width: 1280px;
+  margin: 5vh auto;
+  padding: 2rem;
+  gap: 3rem;
+  height: 90vh;
+  background: @panel-bg;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+}
+
+// 预览卡片区域
+.preview-card {
+  flex: 1 0 0;
+  position: sticky;
+  top: 1rem;
+  height: calc(80vh - 4rem);
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: darken(@bg-color, 2%);
+  border-radius: 16px;
+}
+
+// 卡片样式
+.card {
+  width: 360px;
+  height: 480px;
+  border: 1px solid @border-color;
+  padding: 1.5rem;
+  background: @panel-bg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  &-title {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.2;
+    color: @text-primary;
+    font-weight: 600;
+    .text-ellipsis();
+  }
+
+  &-detail {
+    width: 100%;
+    margin-top: 10px;
+    .static {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .left {
+        color: @text-secondary;
+        font-size: 14px;
+      }
+      .right {
+        color: @text-primary;
+        font-size: 14px;
+      }
+    }
+    .description {
+      margin: 0;
+      color: @text-secondary;
+      line-height: 1.6;
+      font-size: 1rem;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  &-image-container {
+    width: 200px;
+    height: 200px;
+    background: @bg-color;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+// 表单编辑器
+.form-editor {
+  flex: 1;
+  background: @panel-bg;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid @border-color;
+  overflow-y: auto;
+  .flex-column();
+
+  h2 {
+    margin: 0 0 2rem;
+    font-size: 1.5rem;
+    color: @text-primary;
+    font-weight: 600;
+  }
+}
+
+// 表单组件
+.form-group {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: @text-primary;
+    font-size: 0.875rem;
+  }
+
+  input[type='text'],
+  textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid @border-color;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: @text-primary;
+    background: @bg-color;
+    .transition();
+
+    &:focus {
+      outline: none;
+      border-color: @primary-color;
+      box-shadow: 0 0 0 3px fade(@primary-color, 10%);
+    }
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  input[type='file'] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px dashed @border-color;
+    border-radius: 8px;
+    background: @bg-color;
+    cursor: pointer;
+    .transition();
+
+    &:hover {
+      border-color: @primary-color;
+      background: fade(@primary-color, 5%);
+    }
+  }
+}
+
+// 字体选择器
+.font-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid @border-color;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: @text-primary;
+  background: @bg-color;
+  cursor: pointer;
+  .transition();
+
+  &:focus {
+    outline: none;
+    border-color: @primary-color;
+    box-shadow: 0 0 0 3px fade(@primary-color, 10%);
+  }
+
+  // 自定义下拉箭头
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%231e293b' stroke-width='2'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+// 导出按钮
+.export-btn {
+  margin-top: auto;
+  padding: 0.75rem 1.5rem;
+  background: @primary-color;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  .transition();
+
+  &:hover {
+    background: darken(@primary-color, 5%);
+  }
+
+  &:active {
+    background: darken(@primary-color, 10%);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px fade(@primary-color, 30%);
+  }
+}
+
+// 响应式布局
+@media (max-width: 768px) {
+  .container {
+    height: auto;
+    min-height: 80vh;
+  }
+
+  .preview-card {
+    height: auto;
+    position: static;
+  }
+}
+
+// 颜色选择器
+.color-picker {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+
+  input[type='color'] {
+    -webkit-appearance: none;
+    width: 50px;
+    height: 38px;
+    border: 1px solid @border-color;
+    border-radius: 4px;
+    padding: 0;
+    cursor: pointer;
+
+    &::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+    
+    &::-webkit-color-swatch {
+      border: none;
+      border-radius: 3px;
+    }
+  }
+
+  input[type='text'] {
+    flex: 1;
+  }
+}
+
+// 颜色面板
+.color-palette {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+
+  .color-item {
+    width: 38px;
+    height: 38px;
+    border: 1px solid @border-color;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
