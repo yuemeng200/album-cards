@@ -43,11 +43,6 @@
 }
 
 @font-face {
-  font-family: 'FZYTK';
-  src: url('./assets/fonts/FZYTK.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'Harrington';
   src: url('./assets/fonts/HARNGTON.ttf') format('truetype');
 }
@@ -67,9 +62,6 @@
     font-family: 'Chiller', sans-serif;
   }
 
-  &-fzytk {
-    font-family: 'FZYTK', sans-serif;
-  }
 
   &-harngton {
     font-family: 'Harrington', sans-serif;
@@ -149,8 +141,8 @@ body {
       .right {
         color: @text-primary;
         font-size: 18px;
-        font-family: 'FZYTK';
         margin-left: 4px;
+        font-family: 'Helvetica';
       }
     }
     .description {
@@ -455,13 +447,11 @@ body {
     left: 1rem;
     color: @text-secondary;
     font-size: 0.75rem;
-    font-family: 'FZYTK';
     pointer-events: none;
   }
 
   input {
     padding-left: 2.5rem !important;
-    font-family: 'FZYTK';
     letter-spacing: 1px;
     
     &::placeholder {

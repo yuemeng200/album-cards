@@ -182,7 +182,6 @@ function App() {
               >
                 <option value="redoura">Redoura</option>
                 <option value="chiller">Chiller</option>
-                <option value="fzytk">方正姚体</option>
                 <option value="harngton">Harrington</option>
                 <option value="mtcorsva">Monotype Corsiva</option>
               </select>
