@@ -1,15 +1,18 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import html2canvas from 'html2canvas'
 import { extractColors } from './utils/color'
+import defaultImage from './assets/imgs/default.png'
 import './App.less'
 
 function App() {
   const [formData, setFormData] = useState({
-    title: 'Album Name',
-    description: '',
-    imageUrl: '',
+    title: 'Bella Donna',
+    description: '流行曲调、情感丰富的嗓音与沉稳的鼓点',
+    imageUrl: defaultImage,
     titleFont: 'redoura',
-    primaryColor: '#1e293b',
+    primaryColor: '#2563eb',
+    number: '1',
+    fontSize: 40,
   })
   const [colorPalette, setColorPalette] = useState([])
   const cardRef = useRef(null)
@@ -60,7 +63,7 @@ function App() {
       try {
         const canvas = await html2canvas(cardRef.current, {
           backgroundColor: null,
-          scale: 3, // 提高导出图片质量
+          scale: 3, // 提高导出片质量
           logging: false,
         })
 
@@ -75,29 +78,71 @@ function App() {
     }
   }
 
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    e.currentTarget.classList.add('dragging')
+  }
+
+  const handleDragLeave = (e) => {
+    e.currentTarget.classList.remove('dragging')
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    e.currentTarget.classList.remove('dragging')
+    const file = e.dataTransfer.files[0]
+    if (file && file.type.startsWith('image/')) {
+      const imageUrl = URL.createObjectURL(file)
+      setFormData(prev => ({
+        ...prev,
+        imageUrl,
+      }))
+    }
+  }
+
+  useEffect(() => {
+    const img = new Image()
+    img.src = defaultImage
+    img.crossOrigin = 'anonymous'
+    img.onload = async () => {
+      const colors = await extractColors(img)
+      if (colors.length > 0) {
+        setColorPalette(colors)
+        setFormData(prev => ({
+          ...prev,
+          primaryColor: colors[0]
+        }))
+      }
+    }
+  }, [])
+
   return (
     <div className="container">
       {/* 左侧预览卡片 */}
       <div className="preview-card">
         <div className="card" ref={cardRef}>
-          <h2 
+          <div
             className={`card-title font-${formData.titleFont}`}
-            style={{ color: formData.primaryColor }}
+            style={{ 
+              color: formData.primaryColor,
+              fontSize: `${formData.fontSize}px`
+            }}
+            data-text={formData.title || '卡片标题'}
           >
             {formData.title || '卡片标题'}
-          </h2>
+          </div>
           <div className="card-detail">
             <div className="static">
               <div className="left">
                 ·一万张摇滚专辑·
               </div>
               <div className="right" style={{ color: formData.primaryColor }}>
-                No.
+                No.{formData.number}
               </div>
             </div>
-            <p className="description">
+            <div className="description">
               {formData.description || '卡片描述'}
-            </p>
+            </div>
           </div>
           <div className="card-image-container">
             {formData.imageUrl && (
@@ -116,32 +161,43 @@ function App() {
 
       {/* 右侧表单编辑器 */}
       <div className="form-editor">
-        <h2>编辑卡片</h2>
         <div className="form-group">
           <label htmlFor="title">标题</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleInputChange}
-            placeholder="请输入标题"
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="titleFont">标题字体</label>
-          <select
-            id="titleFont"
-            name="titleFont"
-            value={formData.titleFont}
-            onChange={handleInputChange}
-            className="font-select">
-            <option value="redoura">Redoura</option>
-            <option value="chiller">Chiller</option>
-            <option value="fzytk">方正姚体</option>
-            <option value="harngton">Harrington</option>
-            <option value="mtcorsva">Monotype Corsiva</option>
-          </select>
+          <div className="title-control">
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              placeholder="请输入标题"
+            />
+            <div className="font-controls">
+              <select
+                id="titleFont"
+                name="titleFont"
+                value={formData.titleFont}
+                onChange={handleInputChange}
+                className="font-select"
+              >
+                <option value="redoura">Redoura</option>
+                <option value="chiller">Chiller</option>
+                <option value="fzytk">方正姚体</option>
+                <option value="harngton">Harrington</option>
+                <option value="mtcorsva">Monotype Corsiva</option>
+              </select>
+              <input
+                type="number"
+                id="fontSize"
+                name="fontSize"
+                value={formData.fontSize}
+                onChange={handleInputChange}
+                min="20"
+                max="80"
+                className="font-size-input"
+              />
+            </div>
+          </div>
         </div>
         <div className="form-group">
           <label htmlFor="description">描述</label>
@@ -165,13 +221,32 @@ function App() {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="imageUpload">或上传图片</label>
-          <input
-            type="file"
-            id="imageUpload"
-            accept="image/*"
-            onChange={handleImageUpload}
-          />
+          <label htmlFor="imageUpload">上传图片</label>
+          <div className="upload-area">
+            <div 
+              className="upload-trigger"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <svg className="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              <div className="upload-text">
+                拖拽图片到这里，或 <span className="primary">点击上传</span>
+                <br />
+                <span>支持 JPG、PNG 格式</span>
+              </div>
+            </div>
+            <input
+              type="file"
+              id="imageUpload"
+              accept="image/jpeg,image/png"
+              onChange={handleImageUpload}
+            />
+          </div>
         </div>
         <div className="form-group">
           <label htmlFor="primaryColor">主色调</label>
@@ -204,6 +279,21 @@ function App() {
               ))}
             </div>
           )}
+        </div>
+        <div className="form-group">
+          <label htmlFor="number">编号</label>
+          <div className="number-input">
+            <span className="prefix">No.</span>
+            <input
+              type="text"
+              id="number"
+              name="number"
+              value={formData.number}
+              onChange={handleInputChange}
+              maxLength={3}
+              placeholder="001"
+            />
+          </div>
         </div>
         <button className="export-btn" onClick={handleExport}>
           导出卡片
