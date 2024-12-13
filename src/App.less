@@ -6,6 +6,16 @@
 @text-primary: #1e293b;
 @text-secondary: #64748b;
 
+// 断点变量
+@breakpoint-mobile: 768px;
+@breakpoint-tablet: 1024px;
+
+// 布局变量
+@container-padding: 2rem;
+@container-padding-mobile: 1rem;
+@gap-default: 3rem;
+@gap-mobile: 1.5rem;
+
 // Mixins
 .flex-center() {
   display: flex;
@@ -82,12 +92,41 @@ body {
   display: flex;
   max-width: 1280px;
   margin: 5vh auto;
-  padding: 2rem;
-  gap: 3rem;
+  padding: @container-padding;
+  gap: @gap-default;
   height: 90vh;
   background: @panel-bg;
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+  .responsive-container();
+}
+
+// Mixins
+.responsive-container() {
+  @media screen and (max-width: @breakpoint-mobile) {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    margin: 0;
+    padding: @container-padding-mobile;
+    gap: @gap-mobile;
+    border-radius: 0;
+  }
+}
+
+.responsive-preview() {
+  @media screen and (max-width: @breakpoint-mobile) {
+    position: static;
+    height: auto;
+    min-height: 480px;
+    padding: @container-padding-mobile;
+  }
+}
+
+.responsive-editor() {
+  @media screen and (max-width: @breakpoint-mobile) {
+    padding: @container-padding-mobile;
+  }
 }
 
 // 预览卡片区域
@@ -100,9 +139,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: @container-padding;
   background: darken(@bg-color, 2%);
   border-radius: 16px;
+  .responsive-preview();
+
+  // 移动端卡片尺寸调整
+  .card {
+    @media screen and (max-width: @breakpoint-mobile) {
+      width: 300px;
+      height: 400px;
+      padding: 20px 10px 0;
+    }
+  }
 }
 
 // 卡片样式
@@ -128,7 +177,7 @@ body {
 
   &-detail {
     width: 100%;
-    margin-top: 24px;
+    margin-top: 20px;
     .flex-column();
     align-items: center;
     .static {
@@ -161,7 +210,7 @@ body {
   }
 
   &-image-container {
-    width: 80%;
+    width: 74%;
     aspect-ratio: 1/1;
     outline: 1px solid @border-color;
     margin-top: 20px;
@@ -182,6 +231,7 @@ body {
   border: 1px solid @border-color;
   overflow-y: auto;
   .flex-column();
+  .responsive-editor();
 
   h2 {
     margin: 0 0 2rem;
@@ -300,6 +350,11 @@ body {
     outline: none;
     box-shadow: 0 0 0 3px fade(@primary-color, 30%);
   }
+
+  @media screen and (max-width: @breakpoint-mobile) {
+    width: 100%;
+    height: 40px;
+  }
 }
 
 // 响应式布局
@@ -343,6 +398,16 @@ body {
 
   input[type='text'] {
     flex: 1;
+  }
+
+  @media screen and (max-width: @breakpoint-mobile) {
+    flex-wrap: wrap;
+    
+    input[type='color'] {
+      flex: 0 0 100%;
+      height: 40px;
+      margin-bottom: 0.5rem;
+    }
   }
 }
 
@@ -423,6 +488,10 @@ body {
         color: @primary-color;
       }
     }
+
+    @media screen and (max-width: @breakpoint-mobile) {
+      min-height: 120px;
+    }
   }
 
   input[type='file'] {
@@ -496,6 +565,19 @@ body {
         outline: none;
         border-color: @primary-color;
         box-shadow: 0 0 0 2px fade(@primary-color, 10%);
+      }
+    }
+
+    @media screen and (max-width: @breakpoint-mobile) {
+      flex-wrap: wrap;
+      
+      .font-select {
+        flex: 0 0 100%;
+        margin-bottom: 0.5rem;
+      }
+      
+      .font-size-input {
+        width: 100%;
       }
     }
   }
